@@ -5,14 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>HTML Mastery Quiz — Student</title>
 
-  <!-- Tailwind CDN (for quick prototyping) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Simple color theme: teal -->
   <style>
     :root {
-      --brand: #0f766e; /* teal-700 */
-      --brand-500: #14b8a6; /* teal-400 */
+      --brand: #0f766e;
+      --brand-500: #14b8a6;
       --muted: #64748b;
     }
     .brand-bg { background-color: var(--brand); }
@@ -21,7 +19,6 @@
     .teacher-login-btn { background: var(--brand); }
   </style>
 
-  <!-- Icons (Font Awesome) -->
   <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased">
@@ -29,7 +26,6 @@
   <main class="min-h-screen flex items-center justify-center p-6">
     <div class="w-full max-w-4xl">
 
-      <!-- LOGIN VIEW -->
       <section id="login-view" class="bg-white p-10 rounded-3xl shadow-xl text-center max-w-md mx-auto border brand-border">
         <div class="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6 text-teal-600">
           <i class="fa-solid fa-user-graduate text-3xl"></i>
@@ -46,7 +42,6 @@
         </div>
       </section>
 
-      <!-- MAIN MENU -->
       <section id="menu-view" class="hidden mt-8">
         <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
           <div class="flex items-center justify-between mb-6">
@@ -71,7 +66,6 @@
             </div>
           </div>
 
-          <!-- Cards -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="p-6 bg-white rounded-2xl border border-slate-100">
               <h3 class="text-xl font-bold text-slate-700">Beginner</h3>
@@ -97,7 +91,6 @@
         </div>
       </section>
 
-      <!-- QUIZ VIEW -->
       <section id="quiz-view" class="hidden mt-6">
         <div class="bg-white rounded-3xl p-8 shadow border border-slate-100">
           <div class="mb-6">
@@ -108,7 +101,6 @@
         </div>
       </section>
 
-      <!-- RESULT VIEW -->
       <section id="result-view" class="hidden mt-6 text-center">
         <div class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl p-8 border border-slate-100">
           <div id="result-icon-container" class="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 bg-green-100 text-green-600">
@@ -128,9 +120,7 @@
     </div>
   </main>
 
-  <!-- Inline scripts: Quiz logic, per-student storage, submit hook, and small teacher portal (polling) -->
   <script>
-    // --- Config & State ---
     const PASS_MARK = 16; // 80% of 20
     let studentName = localStorage.getItem('student_name') || "";
     let progress = { beginner: false, intermediate: false, advanced: false };
@@ -139,7 +129,6 @@
     let currentIndex = 0;
     let currentScore = 0;
 
-    // Storage helpers (per-student)
     function progressKey(name) { return `html_progress_${name}`; }
     function scoresKey(name) { return `html_scores_${name}`; }
 
@@ -157,14 +146,11 @@
       localStorage.setItem(scoresKey(studentName), JSON.stringify(scores));
     }
 
-    // --- Login / Create / Logout ---
     async function handleLogin() {
       const name = document.getElementById('student-name-input').value.trim();
       if (name.length < 3) return alert("Please enter your full name.");
-      // If not found, prompt to create
       if (!localStorage.getItem(progressKey(name)) && !localStorage.getItem(scoresKey(name))) {
         if (!confirm("No account found. Create a new account?")) return;
-        // initialize
         localStorage.setItem(progressKey(name), JSON.stringify({ beginner:false, intermediate:false, advanced:false }));
         localStorage.setItem(scoresKey(name), JSON.stringify({ beginner:0, intermediate:0, advanced:0 }));
       }
@@ -190,27 +176,22 @@
     }
 
     function logout() {
-      // Only remove session; keep per-student stored data
       localStorage.removeItem('student_name');
       studentName = "";
-      // reset in-memory
       progress = { beginner:false, intermediate:false, advanced:false };
       scores = { beginner:0, intermediate:0, advanced:0 };
       location.reload();
     }
 
-    // --- Menu UI and Level control ---
     function updateMenuUI() {
       document.getElementById('stat-score').innerText = Object.values(scores).reduce((a,b)=>a+b,0);
       document.getElementById('stat-completed').innerText = `${Object.values(progress).filter(v=>v).length}/3`;
-      // Cards
       document.getElementById('card-beginner').innerText = progress.beginner ? 'Completed' : 'Unlocked';
       document.getElementById('card-intermediate').innerText = progress.intermediate ? 'Completed' : 'Locked';
       document.getElementById('card-advanced').innerText = progress.advanced ? 'Completed' : 'Locked';
     }
 
     function checkAuth() {
-      // If signed in, show menu; otherwise show login
       if (studentName) {
         document.getElementById('login-view').classList.add('hidden');
         document.getElementById('menu-view').classList.remove('hidden');
@@ -221,7 +202,6 @@
     }
 
     function startLevel(level) {
-      // enforce lock: intermediate locked until beginner completed, etc.
       if (level === 'intermediate' && !progress.beginner) return alert('Complete Beginner first.');
       if (level === 'advanced' && !progress.intermediate) return alert('Complete Intermediate first.');
       currentLevelKey = level;
@@ -247,7 +227,6 @@
       document.getElementById('quiz-view').classList.remove('hidden');
     }
 
-    // --- Full QUESTIONS_DATA (60 questions) ---
     const QUESTIONS_DATA = {
       beginner: [
         { q: "What does HTML stand for?", o: ["Hyper Text Markup Language","High Text Machine Language","Hyper Tool Markup Language","Home Text Markup Language"], a: 0 },
@@ -317,7 +296,6 @@
       ]
     };
 
-    // --- Rendering & Answer handling ---
     function renderQuestion() {
       const qData = QUESTIONS_DATA[currentLevelKey][currentIndex];
       document.getElementById('q-counter').innerText = `Challenge ${currentIndex+1} of ${QUESTIONS_DATA[currentLevelKey].length}`;
@@ -343,14 +321,12 @@
       }
     }
 
-    // --- Sync helpers ---
     function showSyncStatus(ok) {
       const el = document.getElementById('stat-sync');
       el.innerText = ok ? 'Live' : 'Offline';
       el.className = ok ? 'brand-500' : '';
     }
 
-    // --- finishLevel: update local storage per student and send to Netlify function ---
     async function finishLevel() {
       const total = QUESTIONS_DATA[currentLevelKey].length;
       const passed = currentScore >= PASS_MARK || currentScore === total; // pass logic
@@ -362,7 +338,6 @@
         progress[currentLevelKey] = true;
         scores[currentLevelKey] = currentScore;
 
-        // Save per-student or fallback
         if (studentName) {
           localStorage.setItem(progressKey(studentName), JSON.stringify(progress));
           localStorage.setItem(scoresKey(studentName), JSON.stringify(scores));
@@ -399,24 +374,20 @@
       updateMenuUI();
     }
 
-    // --- Init on load ---
     (function init() {
       checkAuth();
       if (studentName) loadStudentState();
       updateMenuUI();
     })();
 
-    // --- Small teacher portal (polling) - injected UI, protected by validate-reset action ---
     (function teacherPortal() {
       const POLL_INTERVAL = 3000;
-      // Create teacher login button
       const teacherBtn = document.createElement('button');
       teacherBtn.className = 'teacher-login-btn fixed bottom-6 right-6 z-50 p-3 text-white rounded-lg shadow-lg';
       teacherBtn.textContent = 'Teacher Login';
       teacherBtn.onclick = openTeacherPortal;
       document.body.appendChild(teacherBtn);
 
-      // Portal container
       const portal = document.createElement('div');
       portal.id = 'teacher-portal';
       portal.style = 'display:none;position:fixed;right:18px;bottom:90px;width:360px;max-height:60vh;overflow:auto;background:#fff;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.12);padding:12px;z-index:9999';
@@ -462,7 +433,6 @@
           if (!r.ok) throw new Error('Fetch failed');
           const items = await r.json();
           if (!Array.isArray(items)) return;
-          // Filter new items by timestamp
           const newItems = items.filter(i => {
             const t = i.timestamp ? new Date(i.timestamp).getTime() : 0;
             return t > lastTs;
@@ -497,7 +467,6 @@
         return String(s).replace(/[&<>"']/g, (m) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[m]);
       }
 
-      // Expose for debugging
       window.__teacherPortal = { open: openTeacherPortal, close: closePortal, fetchLatest };
     })();
   </script>

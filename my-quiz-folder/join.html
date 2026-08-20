@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <title>Join our HTML5, CSS & JS Community</title>
-    
+
     <meta name="description" content="Level up your coding skills! Join our student group for HTML5, CSS, and JavaScript lessons.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://students-quiz.netlify.app/join">
@@ -19,27 +19,27 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: #f4f7f6; margin: 0; padding: 20px; }
         .container { max-width: 650px; margin: 20px auto; padding: 30px; background: #fff; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
-        
-        /* Logo Styling */
+
+
         .logo-box { width: 110px; height: 110px; margin: 0 auto 15px; border-radius: 50%; overflow: hidden; border: 4px solid #007bff; background: #fff; }
         .logo-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Success Counter Styling */
+
         .counter-section { display: flex; justify-content: space-around; background: #007bff; color: white; padding: 15px; border-radius: 10px; margin: 20px 0; }
         .counter-item h2 { margin: 0; font-size: 1.8rem; }
         .counter-item p { margin: 0; font-size: 0.8rem; text-transform: uppercase; opacity: 0.9; }
 
-        /* Content Sections */
+
         .section-title { color: #007bff; text-align: left; border-bottom: 2px solid #eef9ff; padding-bottom: 5px; margin-top: 25px; }
         .roadmap-list { text-align: left; list-style: none; padding: 0; }
         .roadmap-list li { background: #f9f9f9; padding: 10px; margin-bottom: 8px; border-radius: 6px; border-left: 4px solid #007bff; }
-        
+
         .rules-box { text-align: left; background: #fff5f5; padding: 20px; border-left: 5px solid #ff4d4d; border-radius: 8px; margin: 20px 0; }
-        
-        /* Button & Interaction */
+
+
         .btn-join { display: none; background-color: #25D366; color: white; padding: 18px 35px; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1.2rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
         .btn-join:hover { background-color: #128C7E; transform: translateY(-3px); }
-        
+
         details { text-align: left; background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 6px; margin-bottom: 10px; cursor: pointer; }
         .back-link { display: inline-block; margin-top: 25px; color: #666; text-decoration: none; font-size: 0.9rem; }
     </style>
@@ -96,7 +96,7 @@
         </div>
 
         <div style="margin: 25px 0;">
-            <input type="checkbox" id="agree" onclick="toggleJoinButton()"> 
+            <input type="checkbox" id="agree" onclick="toggleJoinButton()">
             <label for="agree" style="font-weight: bold; cursor: pointer;"> I agree to the rules & consequences.</label>
         </div>
 
@@ -108,13 +108,11 @@
     </div>
 
     <script>
-        // Toggle Join Button
         function toggleJoinButton() {
             const isChecked = document.getElementById("agree").checked;
             document.getElementById("joinLink").style.display = isChecked ? "inline-block" : "none";
         }
 
-        // Animated Counter Logic
         const counters = document.querySelectorAll('.count');
         const speed = 5000;
 

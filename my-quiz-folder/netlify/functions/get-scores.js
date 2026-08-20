@@ -1,15 +1,10 @@
-// Netlify Function: get-scores.js
-// Returns recent submissions from the Google Apps Script Web App (GOOGLE_SCRIPT_URL).
-// Adds a short in-memory cache and returns normalized objects.
 
 const CACHE_TTL = 3000; // milliseconds
 let cache = { ts: 0, data: null };
 
 function normalizeRow(row) {
-  // row may be an object with header names or already normalized
   if (!row || typeof row !== 'object') return null;
 
-  // create a flexible lookup for common header names
   const lookup = {};
   Object.keys(row).forEach(k => {
     lookup[k.toLowerCase().replace(/\s+/g, '')] = row[k];

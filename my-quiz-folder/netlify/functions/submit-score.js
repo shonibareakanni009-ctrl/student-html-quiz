@@ -1,13 +1,6 @@
-/**
- * submit-score.js (updated)
- * - Handles validate-reset (teacher code) and score submissions
- * - Ensures a timestamp is present
- * - Forwards to GOOGLE_SCRIPT_URL (Apps Script)
- * - Returns Apps Script JSON response to the client
- */
+
 
 exports.handler = async function (event) {
-  // Only POST is allowed
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method Not Allowed' }) };
   }
@@ -15,7 +8,6 @@ exports.handler = async function (event) {
   try {
     const body = event.body ? JSON.parse(event.body) : {};
 
-    // Action: validate-reset (teacher code check)
     if (body.action === 'validate-reset') {
       const isCorrect = body.code === process.env.RESET_CODE;
       return {
@@ -25,18 +17,15 @@ exports.handler = async function (event) {
       };
     }
 
-    // Default: submit score
     const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL;
     if (!GOOGLE_SCRIPT_URL) {
       console.error('Missing GOOGLE_SCRIPT_URL environment variable');
       return { statusCode: 500, body: JSON.stringify({ error: 'Server Configuration Error' }) };
     }
 
-    // Ensure timestamp present
     const payload = Object.assign({}, body);
     if (!payload.timestamp) payload.timestamp = new Date().toISOString();
 
-    // Post to Apps Script
     const res = await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -56,7 +45,6 @@ exports.handler = async function (event) {
       };
     }
 
-    // Success - forward Apps Script result to client
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
